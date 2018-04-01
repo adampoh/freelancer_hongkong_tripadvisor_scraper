@@ -14,7 +14,7 @@ def update_csv(data_array):
         writer = csv.writer(f)
         writer.writerow(data_array)
 
-update_csv(['Corporation Name','Name','Location','Rating Score','Review Title','Review Content'])
+update_csv(['Corporation Name','Name','Location','Rating Score','Rating Date','Review Title','Review Content'])
 def get_review_content(review_url):
     review_page=requests.get(review_url)
     soup_review = BeautifulSoup(review_page.content, "html.parser")
@@ -50,6 +50,15 @@ def get_review_content(review_url):
         review_score_classes=main_score_h1.find("div", {"class": "rating"}).find('span').find('span')['class']
         score = int(review_score_classes[1].replace('bubble_',''))/10
         result_data.append(score)
+        # print('Rating',score)
+    except:
+        result_data.append('')
+        # print('Rating', '')
+
+    try:
+        review_date = main_review_div.find("span", {"class": "ratingDate relativeDate"})['title']
+        result_data.append(review_date)
+        print('review_date')
         # print('Rating',score)
     except:
         result_data.append('')
